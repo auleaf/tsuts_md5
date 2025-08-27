@@ -126,18 +126,19 @@ function binlMD5(x: number[], len: number): number[] {
 }
 
 function binl2rstr(input: number[]): string {
-    let output = '';
-    for (let i = 0; i < input.length * 32; i += 8) {
+    let output:string = '';
+    for (let i:number = 0; i < input.length * 32; i += 8) {
         output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xff);
     }
     return output;
 }
 
 function rstr2binl(input: string): number[] {
-    let output = new Array(input.length >> 2);
-    for (let i = 0; i < output.length; i++) output[i] = 0;
-    for (let i = 0; i < input.length * 8; i += 8) {
-        output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << (i % 32);
+    let output:number[] = new Array(input.length >> 2);
+    for (let i:number = 0; i < output.length; i++) output[i] = 0;
+    for (let i:number = 0; i < input.length * 8; i += 8) {
+        let charCode:number = input.charCodeAt(i / 8) ?? 0;
+        output[i >> 5] |= (charCode & 0xff) << (i % 32);
     }
     return output;
 }
@@ -147,17 +148,19 @@ function rstrMD5(s: string): string {
 }
 
 function rstr2hex(input: string): string {
-    let hexTab = '0123456789abcdef';
-    let output = '';
-    for (let i = 0; i < input.length; i++) {
-        let x = input.charCodeAt(i);
+    let hexTab:string = '0123456789abcdef';
+    let output:string = '';
+    for (let i:number = 0; i < input.length; i++) {
+        let x:number = input.charCodeAt(i) ?? 0;
         output += hexTab.charAt((x >>> 4) & 0x0f) + hexTab.charAt(x & 0x0f);
     }
     return output;
 }
 
 function str2rstrUTF8(input: string): string {
-    return decodeURIComponent(encodeURIComponent(input));
+  //TextEncoder?TextDecoder?
+  return new TextDecoder().decode(new TextEncoder().encode(input));
+  //  return decodeURIComponent(encodeURIComponent(input)?)?;
 }
 
 export function md5(str: string): string {
